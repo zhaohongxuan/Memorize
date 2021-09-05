@@ -9,27 +9,21 @@ import SwiftUI
 
 struct EmojiMemoryGameView: View {
         
-    @ObservedObject var viewModel: EmojiMemoryGame
+    @ObservedObject var game: EmojiMemoryGame
     
     var body: some View {
-        VStack{
-            ScrollView{
-                LazyVGrid(columns: [GridItem(.adaptive(minimum:80))]){
-                    ForEach(viewModel.cards){
-                         card in CardView(card: card)
-                            .aspectRatio(2/3, contentMode: .fit)
-                            .onTapGesture {
-                                viewModel.choose(card)
-                            }
-                            
-                    }
-                }
-            }.foregroundColor(.red)
-        
+        AspectVGrid(items: game.cards, aspectRatio: 2/3 ) { card in
+          if card.isMatched && !card.isFaceUp{
+                Rectangle().opacity(0)
+            }else{
+                CardView(card: card)
+                    .padding(4)
+                    .onTapGesture { game.choose(card)}
+            }
         }
-       .padding(.horizontal)
+        .foregroundColor(.red)
+        .padding(.horizontal)
     }
-    
 }
 
 
@@ -41,19 +35,22 @@ struct CardView: View {
     var body: some View{
         GeometryReader { geometry in
             ZStack{
-                let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
-                if card.isFaceUp{
-                    shape.fill().foregroundColor(.white)
-                    shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
-                    Text(card.content).font(font(in: geometry.size))
-                }else if card.isMatched{
-                    shape.opacity(0)
-                }
-                else{
-                    shape.fill()
-                }
-            }
+                
+                Pie(startAngle: Angle(degrees: 0-90), endAngle: Angle(degrees: 270-90))
+                    .padding(5).opacity(0.8)
+                
+                Text(card.content).font(font(in: geometry.size))
+                    .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
+                    .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false))
+                    .font(Font.system(size: DrawingConstants.fontSize))
+                    .scaleEffect(scale(thatFits: geometry.size))
+        
+            }.cardify(isFaceUp: card.isFaceUp)
         }
+    }
+    
+    private func scale(thatFits size:CGSize) -> CGFloat{
+        min(size.height, size.width) / (DrawingConstants.fontSize / DrawingConstants.fontScale)
     }
     
     private func font(in size: CGSize)-> Font{
@@ -62,15 +59,15 @@ struct CardView: View {
     
     
     private struct DrawingConstants {
-        static let cornerRadius: CGFloat = 20
-        static let lineWidth: CGFloat = 3
-        static let fontScale: CGFloat = 0.6
+        static let fontScale: CGFloat = 0.5
+        static let fontSize:CGFloat=28
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let game = EmojiMemoryGame()
-        EmojiMemoryGameView(viewModel: game)
+        game.choose(game.cards.first!)
+       return  EmojiMemoryGameView(game: game)
     }
 }
