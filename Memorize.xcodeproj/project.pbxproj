@@ -18,6 +18,9 @@
 		3A82B0BB26E37D1100BF5A07 /* AspectVGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A82B0BA26E37D1100BF5A07 /* AspectVGrid.swift */; };
 		3A82B0C326E4595000BF5A07 /* Pie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A82B0C226E4595000BF5A07 /* Pie.swift */; };
 		3A82B0CB26E4729D00BF5A07 /* Cardify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A82B0CA26E4729D00BF5A07 /* Cardify.swift */; };
+		8B7D70F62AF83E2B00F9B5C3 /* ThemeLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7D70F52AF83E2B00F9B5C3 /* ThemeLibrary.swift */; };
+		8B7D70F82AF83E5B00F9B5C3 /* LevelSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7D70F72AF83E5B00F9B5C3 /* LevelSystem.swift */; };
+		8B7D71012AF85A4D00F9B5C3 /* CardDensityAdvisor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7D71002AF85A4D00F9B5C3 /* CardDensityAdvisor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +58,9 @@
 		3A82B0BA26E37D1100BF5A07 /* AspectVGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectVGrid.swift; sourceTree = "<group>"; };
 		3A82B0C226E4595000BF5A07 /* Pie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pie.swift; sourceTree = "<group>"; };
 		3A82B0CA26E4729D00BF5A07 /* Cardify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cardify.swift; sourceTree = "<group>"; };
+		8B7D70F52AF83E2B00F9B5C3 /* ThemeLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeLibrary.swift; sourceTree = "<group>"; };
+		8B7D70F72AF83E5B00F9B5C3 /* LevelSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelSystem.swift; sourceTree = "<group>"; };
+		8B7D71002AF85A4D00F9B5C3 /* CardDensityAdvisor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDensityAdvisor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +111,9 @@
 		13DB795A26645F7200999C65 /* Memorize */ = {
 			isa = PBXGroup;
 			children = (
+				8B7D71002AF85A4D00F9B5C3 /* CardDensityAdvisor.swift */,
+				8B7D70F72AF83E5B00F9B5C3 /* LevelSystem.swift */,
+				8B7D70F52AF83E2B00F9B5C3 /* ThemeLibrary.swift */,
 				3A82B0BA26E37D1100BF5A07 /* AspectVGrid.swift */,
 				13DB79892666822000999C65 /* MemoryGame.swift */,
 				13DB798E266684A900999C65 /* EmojiMemoryGame.swift */,
@@ -207,8 +216,8 @@
 		13DB795026645F7200999C65 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1240;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					13DB795726645F7200999C65 = {
 						CreatedOnToolsVersion = 12.4;
@@ -274,6 +283,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B7D71012AF85A4D00F9B5C3 /* CardDensityAdvisor.swift in Sources */,
+				8B7D70F82AF83E5B00F9B5C3 /* LevelSystem.swift in Sources */,
 				3A82B0C326E4595000BF5A07 /* Pie.swift in Sources */,
 				3A82B0CB26E4729D00BF5A07 /* Cardify.swift in Sources */,
 				13DB798A2666822000999C65 /* MemoryGame.swift in Sources */,
@@ -281,6 +292,7 @@
 				13DB795C26645F7200999C65 /* MemorizeApp.swift in Sources */,
 				3A82B0BB26E37D1100BF5A07 /* AspectVGrid.swift in Sources */,
 				13DB798F266684A900999C65 /* EmojiMemoryGame.swift in Sources */,
+				8B7D70F62AF83E2B00F9B5C3 /* ThemeLibrary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,6 +365,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -367,7 +380,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -414,6 +427,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -422,7 +436,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -437,11 +451,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Memorize/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Memorize/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -458,11 +473,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Memorize/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Memorize/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -481,7 +497,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = MemorizeTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -502,7 +518,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = MemorizeTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

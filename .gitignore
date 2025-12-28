@@ -1,0 +1,38 @@
+# macOS clutter
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode build products and metadata
+DerivedData/
+build/
+*.log
+*.moved-aside
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
+profile
+
+# Swift Package Manager
+.build/
+Packages/
+Package.resolved
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace/
+
+# Swift Package Index cache
+.swiftpm/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+
+# Misc
+*.swp
+*.tmp
+*.bak
