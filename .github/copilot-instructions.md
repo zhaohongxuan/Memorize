@@ -1,25 +1,32 @@
 # Copilot Instructions
 
-- Project: SwiftUI "Memorize" memory game; single target, no external deps; run/build with Xcode (open `Memorize.xcodeproj`, press Play). Tests are placeholder in `MemorizeTests/`.
-- App entry: `MemorizeApp` creates one `EmojiMemoryGame` instance and injects into `EmojiMemoryGameView` via `WindowGroup`.
-- Architecture: simple MVVM.
-  - Model `MemoryGame` (`MemoryGame.swift`): pure logic, holds `cards` array and `score`. Matching increments `score` by 1; `choose(_:)` flips and matches pairs; `flipCardsDown(withIDs:)` and `flipCardBack(_:)` manage timer-driven face-down behavior. `Card` tracks bonus time (`bonusTimeLimit = 6s`) and exposes `bonusRemaining` used by UI.
-  - ViewModel `EmojiMemoryGame` (`EmojiMemoryGame.swift`): `@Published game`, exposes `cards`, `score`, `isGameOver` (all matched). Provides `choose`, `shuffle`, `flipCardBack`, `restart`. Schedules matched-face-up cards to flip down after 2.1s via `DispatchQueue.main.asyncAfter` (timing chosen to allow spin/fade animations).
-  - Views: `EmojiMemoryGameView` (`EmojiMemoryGameView.swift`) renders score, grid, shuffle button, and celebration overlay when `isGameOver`. `CardView` shows content, bonus pie, match spin/fade. Layout helper `AspectVGrid` adapts card width to fit while preserving aspect ratio. Styling helpers: `Cardify` 3D flip modifier; `Pie` shape draws animatable wedge.
-- UI behaviors/patterns:
-  - Grid uses `AspectVGrid` + `.aspectRatio(2/3)`; minimum item width 100, zero spacing.
-  - Card tap wraps `game.choose` in `withAnimation(.easeInOut(duration: 0.5))`; unmatched face-up cards auto-flip back when `bonusTimeRemaining` hits 0 (Timer in `EmojiMemoryGameView`).
-  - Matched & face-up cards trigger delayed spin/fade: `CardView` sets `matchEffectsEnabled` after 0.5s; opacity animates to 0 with 1s easeOut + 1s delay; rotation repeats forever once matched.
-  - `Pie` animates `bonusRemaining`; `Cardify` uses rotation < 90° to show face/front.
-  - `celebrationOverlay` appears when all cards matched; `Play Again` calls `game.restart()` inside animation.
-- Data/config:
-  - Emojis are static in `EmojiMemoryGame.emojis`; currently 11 transport icons; game uses `numberOfPairsOfCards: 5` (first five emojis). Adjust by changing `numberOfPairsOfCards` and/or emoji list.
-- Conventions:
-  - Keep game logic in `MemoryGame`; view model only bridges UI and model plus scheduling (timers/DispatchQueue). UI concerns stay in SwiftUI views/modifiers/shapes.
-  - When adding animations/timers, re-check `matched && isFaceUp` guards to avoid stale async callbacks.
-  - Prefer `withAnimation` around model mutations triggered by gestures/buttons.
-- Extension tips:
-  - For new themes: add emoji arrays and a selector in `EmojiMemoryGame` rather than sprinkling in views.
-  - For scoring changes: update `MemoryGame.score` updates inside `choose(_:)`; adjust `bonusTimeLimit` on `Card` if changing timer feel.
-  - To change layout density, tweak `AspectVGrid` `width` or `GridItem` spacing.
-- Testing: currently empty; to add unit tests, target pure `MemoryGame` logic (e.g., matching, scoring, bonus timing) without SwiftUI.
+## Project Snapshot
+- SwiftUI Memorize memory game targeting iOS only. Open `Memorize.xcodeproj` in Xcode 17, run the `Memorize` scheme, and keep tests under `MemorizeTests/`.
+- `MemorizeApp` instantiates a single `EmojiMemoryGame` and injects it into `EmojiMemoryGameView` via `WindowGroup`; no other dependency injection.
+
+## Architecture Map
+- Model: `MemoryGame<CardContent>` (`Memorize/MemoryGame.swift`) owns deck state, scoring, mismatch tracking, shuffling, and card bonus timers. `Card.stopUsingBonusTime()` resets `pastFaceUpTime` when an unmatched card flips down but preserves elapsed time for matched cards so fade/spin windows finish.
+- ViewModel: `EmojiMemoryGame` (`Memorize/EmojiMemoryGame.swift`) wraps the model, exposes HUD data (score, stars, mismatches, progress) via `GameSessionManager`, and schedules matched cards to flip down 2.1 s after matching (`DispatchQueue.main.asyncAfter`). All user intents eventually call `MemoryGame` mutations.
+- Views: `EmojiMemoryGameView` renders the HUD, stats row, `AspectVGrid` of cards, action buttons (shuffle/replay/journey reset), and a celebration overlay. Each `CardView` animates a `Pie` wedge for bonus time, starts a perpetual spin 0.5 s after a match, and fades out over 1 s; a `Timer` publisher flips unmatched cards whose `bonusTimeRemaining` hits zero.
+- Layout helpers: `AspectVGrid` enforces the 2:3 card ratio with ≥50 pt width; `Cardify` provides the 3D flip (front shown while rotation <90°); `Pie` animates start/end angles.
+
+## Device & Level Logic
+- `CardDensityAdvisor` (`Memorize/CardDensityAdvisor.swift`) clamps pair counts per device (phone tiers 5–8 pairs, iPad 10) using the longest screen edge; override the limit in tests via `overridePairLimit` (always reset with `defer`).
+- Decks are built by `EmojiMemoryGame.buildDeck`, which pulls symbols + palettes from `ThemeLibrary` using `LevelConfig.themeID` and applies the current level’s `bonusTimeLimit`. Adjust pair counts or bonuses by editing `LevelConfig`/theme data, not scattered constants.
+- `GameSessionManager` tracks `LevelConfig`s, total levels, earned stars, and advancement rules; always call `advanceLevel()` to update both manager and deck, and `restartJourney()` to reset everything.
+
+## UI Behaviors & Conventions
+- Wrap taps, shuffles, level restarts, and journey actions in `withAnimation` (existing code uses `.easeInOut(duration: 0.5)`), so mutations stay synchronized with SwiftUI transitions.
+- Guard async work with `card.isMatched && card.isFaceUp` to avoid acting on cards that already flipped back due to timers or delays.
+- Hide matched-but-face-down cards by rendering `Color.clear`; keep matched-face-up cards visible until the scheduled flip-down so the spin/fade finishes cleanly.
+- HUD styling relies on semi-transparent white backgrounds plus palette-colored shadows; keep palette values (`ThemePalette`) as the single truth for colors.
+
+## Testing & Tooling
+- Unit coverage lives in `MemorizeTests/MemorizeTests.swift` and verifies scoring/mismatches (`MemoryGame`), session progression (`GameSessionManager`), deck sizing across levels/device limits, and restart freshness. Extend here when adding gameplay or level logic.
+- Preferred command-line test run: `xcodebuild test -project Memorize.xcodeproj -scheme Memorize -only-testing:MemorizeTests -destination 'platform=iOS Simulator,name=iPhone 17'`.
+- Tests rely on deterministic decks: pass `devicePairLimit` into `EmojiMemoryGame`, inject custom `LevelConfig` arrays, and restore global overrides in a `defer` block to avoid leaking state.
+
+## Extension Patterns
+- New themes go into `ThemeLibrary` (`content`, `palette`, `displayName`) and are referenced from `LevelConfig.themeID`; expose them through the session manager rather than hard-coding in the view.
+- Gameplay tweaks (scoring, bonus timers, flip logic) belong inside `MemoryGame`; surface any extra UI needs via computed properties on `EmojiMemoryGame` so SwiftUI views remain declarative.
+- Layout changes should prefer adjusting `AspectVGrid` (adaptive minimum, spacing) or the shared button styles instead of per-view GeometryReader math.
